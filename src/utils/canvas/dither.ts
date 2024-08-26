@@ -5,8 +5,13 @@ interface DitherOptions {
 
 type Color = [number, number, number];
 
-const distance = (a: Color, b: Color) =>
-  (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+const distance = (color1: Color, color2: Color): number => {
+  return Math.sqrt(
+    (color1[0] - color2[0]) ** 2 +
+      (color1[1] - color2[1]) ** 2 +
+      (color1[2] - color2[2]) ** 2
+  );
+};
 
 const filter = (imageData: ImageData, palette: Color[]) => {
   const dt = imageData.data;
@@ -16,12 +21,6 @@ const filter = (imageData: ImageData, palette: Color[]) => {
     const distances = palette.map((p) => distance(p, color));
     const nColor = palette[distances.indexOf(Math.min(...distances))];
 
-    if (!nColor?.[0] || !nColor?.[1] || !nColor?.[2]) {
-      console.log("No color found");
-      break;
-    }
-
-    const m = (dt[i] + dt[i + 1] + dt[i + 2]) / 3;
     dt[i] = nColor[0];
     dt[i + 1] = nColor[1];
     dt[i + 2] = nColor[2];

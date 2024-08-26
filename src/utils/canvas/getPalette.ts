@@ -121,5 +121,5 @@ export const getPalette =
 
     // Extract the color palette with the desired number of colors
     const colorPalette = kMeans(sampledPixels, numberOfColors);
-    return colorPalette;
+    return colorPalette.filter((color) => !color.includes(NaN));
   };
