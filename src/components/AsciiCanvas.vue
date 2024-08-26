@@ -41,7 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const sizes = ["45", "90", "180", "360"];
+const sizes = ["45", "90", "180", "360", "720"];
 
 const wrapper = ref<HTMLDivElement>();
 
@@ -152,7 +152,7 @@ const dataUrl = computed(() => {
           </Label>
           <NumberField
             id="dither-shades"
-            :min="2"
+            :min="1"
             :max="20"
             v-model="ditherShades"
             :disabled="!isDithered"

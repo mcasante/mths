@@ -1,6 +1,63 @@
+import { getPalette } from "./getPalette";
 interface DitherOptions {
   maxColors: number;
 }
+
+type Color = [number, number, number];
+
+const distance = (a: Color, b: Color) =>
+  (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+
+const filter = (imageData: ImageData, palette: Color[]) => {
+  const dt = imageData.data;
+  for (let i = 0; i < dt.length; i += 4) {
+    const color: Color = [dt[i], dt[i + 1], dt[i + 2]];
+
+    const distances = palette.map((p) => distance(p, color));
+    const nColor = palette[distances.indexOf(Math.min(...distances))];
+
+    if (!nColor?.[0] || !nColor?.[1] || !nColor?.[2]) {
+      console.log("No color found");
+      break;
+    }
+
+    const m = (dt[i] + dt[i + 1] + dt[i + 2]) / 3;
+    dt[i] = nColor[0];
+    dt[i + 1] = nColor[1];
+    dt[i + 2] = nColor[2];
+  }
+};
+
+const dithering = (imageData: ImageData, width: number, shades = 5) => {
+  const idxs = [0, 1, 2];
+  const compute = (c: number) =>
+    Math.round((shades * c) / 255) * (255 / shades);
+
+  const k = [
+    [4, 7 / 16],
+    [width - 4, 3 / 16],
+    [width, 5 / 16],
+    [width + 4, 1 / 16],
+  ];
+
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    const colors = idxs.map((n) => [
+      imageData.data[i + n],
+      compute(imageData.data[i + n]),
+    ]);
+    const diff = colors.map((c) => c[0] - c[1]);
+
+    idxs.forEach((n) => (imageData.data[i + n] = colors[n][1]));
+
+    k.forEach(([start, factor]) =>
+      idxs.forEach(
+        (n) =>
+          (imageData.data[i + start + n] =
+            imageData.data[i + start + n] + diff[n] * factor)
+      )
+    );
+  }
+};
 
 export const dither =
   (options: DitherOptions = { maxColors: 10 }) =>
@@ -10,48 +67,12 @@ export const dither =
     const imgData = new ImageData(imageData.width, imageData.height);
     imgData.data.set(dt);
 
-    const data = imgData.data;
     const width = imageData.width;
-    const height = imageData.height;
-
     const maxColors = options.maxColors;
-    const possibleColors = Array.from({ length: maxColors }, (_, i) => {
-      return Math.floor((i / maxColors) * 255);
-    });
+    const palette = getPalette(10, 500)(imgData);
 
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const i = y * width + x;
-
-        const oldColor = data[i * 4];
-        const newColor = possibleColors.reduce((acc, color) => {
-          return Math.abs(color - oldColor) < Math.abs(acc - oldColor)
-            ? color
-            : acc;
-        }, 0);
-
-        const err = oldColor - newColor;
-        data[i * 4] = newColor;
-        data[i * 4 + 1] = newColor;
-        data[i * 4 + 2] = newColor;
-
-        if (x + 1 < width) {
-          data[i * 4 + 4] += (err * 7) / 16;
-        }
-
-        if (y + 1 < height) {
-          if (x > 0) {
-            data[(i + width - 1) * 4] += (err * 3) / 16;
-          }
-
-          data[(i + width) * 4] += (err * 5) / 16;
-
-          if (x + 1 < width) {
-            data[(i + width + 1) * 4] += err / 16;
-          }
-        }
-      }
-    }
+    filter(imgData, palette);
+    dithering(imgData, width, maxColors);
 
     return imgData;
   };
