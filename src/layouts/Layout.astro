@@ -21,14 +21,16 @@ import ModeToggle from '@/components/ModeToggle.vue';
 	<body>
 		<header class="flex justify-center">
 			<div class="container flex justify-between items-center py-4">
-				<h1>{title}</h1>
+				<h1 class="text-2xl font-bold">
+					MTHS.<span class="opacity-80 font-normal">CST</span>
+				</h1>
 
 				<ModeToggle client:only="vue" />
 			</div>
 		</header>
 
 		<slot />
-		
+
 		<script is:inline>
 			const getThemePreference = () => {
 				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {

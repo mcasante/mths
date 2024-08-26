@@ -2,16 +2,37 @@
 import "@/styles/globals.css"
 import Layout from '../layouts/Layout.astro';
 import AsciiCanvas from '@/components/AsciiCanvas.vue';
+
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+	CardContent,
+} from '@/components/ui/card';
 ---
 
 <Layout title="Welcome to Astro.">
 	<div class="container">
-		<main>
-			<aside class="w-full max-w-sm">
+		<main class="grid grid-cols-8 md:grid-cols-12 gap-4">
+			<section class="col-span-4">
 				<AsciiCanvas client:load />
-			</aside>
-		</main>
-	</div>
+			</section>
+			<section class="col-span-8">
+				<Card>
+					<CardHeader>
+						<CardTitle>About me</CardTitle>
+						<CardDescription class="text-justify">
+							I am Matheus Casante, a seasoned front-end developer with a strong focus on creating intuitive and efficient user interfaces. Currently, I am part of the team at Folha de São Paulo, where I contribute to building a robust Design System and middleware backend layer, ensuring seamless data processing and declarative UI rendering. My experience spans from developing comprehensive front-end solutions for client credit platforms at a55 to crafting international brand websites at The9Level, using technologies like Vue.js, TypeScript, and Astro. With a foundation in Marketing and Systems Analysis and Development, I combine technical expertise with strategic thinking to deliver high-impact digital products.
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						
+					</CardContent>
+			</Card>
+				
+			</main>
+		</div>
 </Layout>
 
 <style>
