@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+
+import EditableImage from '@/islands/EditableImage.vue';
+import pfp from "@/assets/images/fallback-pfp.png";
+---
+
+<Layout title="Welcome to Astro.">
+	<div class="flex gap-4 flex-col items-center">
+    <section transition:name="profile" class="profile">
+      <Card>
+        <CardHeader class="w-full flex items-center flex-row gap-4">
+          <div class="w-24 rounded-full overflow-hidden">
+            <EditableImage transition:name="profile-picture" class="aspect-square object-cover transition-all" fallback-src={pfp.src} client:load />
+          </div>
+          <div>
+            <CardTitle transition:name="profile-name">@m_casante</CardTitle>
+            <CardDescription class="mt-1" transition:name="profile-description">
+              Front-end Developer
+            </CardDescription>
+          </div>
+        </CardHeader>
+      </Card>
+    </section>
+
+    <section>
+      <Card class="max-w-4xl ring-1 ring-zinc-600 rounded-md bg-transparent">
+        <CardHeader class="px-8 pb-4">
+          <CardTitle class="text-3xl font-bold">About me</CardTitle>
+        </CardHeader>
+        <CardContent class="text-justify px-8">
+          I am Matheus Casante, a seasoned front-end developer with a strong focus on creating intuitive and efficient user interfaces. Currently, I am part of the team at Folha de São Paulo, where I contribute to building a robust Design System and middleware backend layer, ensuring seamless data processing and declarative UI rendering. My experience spans from developing comprehensive front-end solutions for client credit platforms at a55 to crafting international brand websites at The9Level, using technologies like Vue.js, TypeScript, and Astro. With a foundation in Marketing and Systems Analysis and Development, I combine technical expertise with strategic thinking to deliver high-impact digital products.
+        </CardContent>
+      </Card>
+		</section>
+  </div>
+
+</Layout>
+
+<style lang="postcss">
+.profile {
+  @apply max-w-xl;
+}
+</style>

@@ -1,7 +1,6 @@
 ---
-import "@/styles/globals.css"
 import Layout from '../layouts/Layout.astro';
-import AsciiCanvas from '@/components/AsciiCanvas.vue';
+import EditableImage from '@/islands/EditableImage.vue';
 
 import {
 	Card,
@@ -10,31 +9,85 @@ import {
 	CardDescription,
 	CardContent,
 } from '@/components/ui/card';
+
+import HoverControl from "@/islands/HoverControl.vue";
+import pfp from "@/assets/images/fallback-pfp.png";
 ---
 
 <Layout title="Welcome to Astro.">
-	<div class="container">
-		<main class="grid grid-cols-8 md:grid-cols-12 gap-4">
-			<section class="col-span-4">
-				<AsciiCanvas client:load />
-			</section>
-			<section class="col-span-8">
+	<div class="c-card_grid">
+		<section transition:name="profile" class="profile">
+			<Card>
+				<CardHeader transition:name="profile-header" class="w-full flex flex-row gap-4 sm:block">
+					<div class="rounded-md max-w-36 sm:max-w-full sm:mb-2 overflow-hidden">
+						<EditableImage transition:name="profile-picture" class="aspect-square object-cover" fallback-src={pfp.src} client:load />
+					</div>
+					<div>
+						<CardTitle transition:name="profile-name">@m_casante</CardTitle>
+						<CardDescription class="mt-1" transition:name="profile-description">
+							Front-end Developer
+						</CardDescription>
+					</div>
+				</CardHeader>
+			</Card>
+		</section>
+
+		<section class="about">
+			<HoverControl href="/another-page" client:load baseWidth="45" isDithered={false} isAscii={true}>
 				<Card>
 					<CardHeader>
 						<CardTitle>About me</CardTitle>
-						<CardDescription class="text-justify">
-							I am Matheus Casante, a seasoned front-end developer with a strong focus on creating intuitive and efficient user interfaces. Currently, I am part of the team at Folha de São Paulo, where I contribute to building a robust Design System and middleware backend layer, ensuring seamless data processing and declarative UI rendering. My experience spans from developing comprehensive front-end solutions for client credit platforms at a55 to crafting international brand websites at The9Level, using technologies like Vue.js, TypeScript, and Astro. With a foundation in Marketing and Systems Analysis and Development, I combine technical expertise with strategic thinking to deliver high-impact digital products.
-						</CardDescription>
 					</CardHeader>
-					<CardContent>
-						
+					<CardContent class="text-justify px-8">
+						I'm Matheus Casante, a front-end developer at Folha de São Paulo, working on the Design System. I've built solutions for a55 and The9Level using Vue.js, TypeScript, and Astro.
 					</CardContent>
+				</Card>
+			</HoverControl>
+		</section>
+
+		<section class="resume">
+			<Card>
+				<CardHeader>
+					<CardTitle>Work experience</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<ul class="list-disc list-inside">
+						<li>Front-end Developer at Folha de São Paulo</li>
+						<li>Front-end Developer at a55</li>
+						<li>Front-end Developer at The9Level</li>
+					</ul>
+				</CardContent>
 			</Card>
-				
-			</main>
-		</div>
+		</section>
+	</div>
 </Layout>
 
-<style>
-	
+<style lang="postcss">
+.c-card_grid {
+	@apply grid grid-cols-6 gap-4;
+	grid-template-rows: auto;
+
+	grid-template-areas:
+		"A A A A A A"
+		"B B B C C C";
+
+	.c-card, a { @apply h-full }
+	.profile { grid-area: A }
+	.about { grid-area: B }
+	.resume { grid-area: C }
+
+	@screen md {
+		grid-template-areas:
+			"A A B B B B"
+			"A A C C C C"
+			"A A C C C C";
+	}
+
+	@screen lg {
+		grid-template-areas:
+			"A A B B C C"
+			"A A B B C C"
+			"A A . . . .";
+	}
+}
 </style>

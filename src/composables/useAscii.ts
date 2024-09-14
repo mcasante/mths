@@ -8,7 +8,7 @@ import { setCanvasSize, toAscii, toAspects } from "@/utils";
 import type { Renderer } from "./types";
 import type { BasicColorMode } from "@vueuse/core";
 
-const decimalRound = (num: number, decimalPlaces = 0) => {
+const decimalRound = (num: number, decimalPlaces = 2) => {
   return Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
 };
 
@@ -59,6 +59,21 @@ export const useAscii =
           );
         });
       });
+
+      // fill borders with random chars
+      const borderChars = [
+        "@",
+        "#",
+        "S",
+        "%",
+        "?",
+        "*",
+        "+",
+        ";",
+        ":",
+        ",",
+        ".",
+      ];
     };
 
     return { getAsciiString, render };

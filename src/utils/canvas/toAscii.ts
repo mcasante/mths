@@ -2,7 +2,22 @@ import type { BasicColorMode } from "@vueuse/core";
 
 export const toAscii = (imageData: ImageData, mode: BasicColorMode) => {
   const data = imageData.data;
-  const charSet = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", ".", " "];
+  const charSet = [
+    "@",
+    "#",
+    "S",
+    "%",
+    "?",
+    "*",
+    "+",
+    ";",
+    ":",
+    ",",
+    ".",
+    " ",
+    " ",
+    " ",
+  ];
   const chars = mode === "dark" ? charSet.reverse() : charSet;
   // const chars = "█▓▒░".split("");
 
@@ -16,7 +31,7 @@ export const toAscii = (imageData: ImageData, mode: BasicColorMode) => {
   const brightest = Math.max(...Array.from(shades));
   const intervals = ~~(brightest / chars.length);
 
-  const contrast = 0.8;
+  const contrast = 1.2;
   const intercept = (chars.length / 2) * (1 - contrast);
   const charData = [];
 

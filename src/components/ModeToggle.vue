@@ -15,7 +15,7 @@ const mode = useColorMode();
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button variant="outline">
+      <Button variant="outline" id="radix-vue-dropdown-menu-trigger-1">
         <Sun
           class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
         />

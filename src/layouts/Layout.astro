@@ -1,15 +1,22 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
+import "@/styles/globals.css"
+import { cn } from "@/lib/utils";
+
 interface Props {
 	title: string;
+	class?: string
 }
 
 const { title } = Astro.props;
 
 import ModeToggle from '@/components/ModeToggle.vue';
+import Logo from '@/components/Logo.vue';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
@@ -17,19 +24,30 @@ import ModeToggle from '@/components/ModeToggle.vue';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<ViewTransitions />
 	</head>
-	<body>
+	<body class="min-h-screen flex flex-col">
 		<header class="flex justify-center">
 			<div class="container flex justify-between items-center py-4">
-				<h1 class="text-2xl font-bold">
-					MTHS.<span class="opacity-80 font-normal">CST</span>
-				</h1>
+				<Logo />
 
-				<ModeToggle client:only="vue" />
+				<nav>
+					<ul class="flex gap-4">
+						<li>
+							<a href="/">Home</a>
+						</li>
+						<li>
+							<a href="/another-page">About</a>
+						</li>
+				</nav>
+
+				<ModeToggle client:load />
 			</div>
 		</header>
 
-		<slot />
+		<main class={cn('sm:container px-2', Astro.props.class)}>
+			<slot />
+		</main>
 
 		<script is:inline>
 			const getThemePreference = () => {
